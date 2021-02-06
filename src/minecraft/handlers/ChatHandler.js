@@ -1,10 +1,12 @@
 const EventHandler = require('../../contracts/EventHandler')
+const CommandHandler = require('../commands/CommandHandler')
 
 class StateHandler extends EventHandler {
-  constructor(minecraft) {
+  constructor(minecraft, command) {
     super()
 
     this.minecraft = minecraft
+    this.command = command
   }
 
   registerEvents(bot) {
@@ -19,10 +21,10 @@ class StateHandler extends EventHandler {
     if (this.isLobbyJoinMessage(message)) {
       console.log('Sending Minecraft client to limbo')
 
-      return this.bot.chat('/limbo')
+      return this.bot.chat('§')
     }
 
-    if (! this.isGuildMessage(message)) {
+    if (!this.isGuildMessage(message)) {
       return
     }
 
@@ -31,17 +33,20 @@ class StateHandler extends EventHandler {
     let hasRank = group.endsWith(']')
 
     let userParts = group.split(' ')
-    let username = userParts[
-      userParts.length - (hasRank ? 2 : 1)
-    ]
+    let username = userParts[userParts.length - (hasRank ? 2 : 1)]
 
     if (this.isMessageFromBot(username)) {
       return
     }
 
+    const playerMessage = parts.join(':').trim()
+    if (this.command.handle(username, playerMessage)) {
+      return
+    }
+
     this.minecraft.broadcastMessage({
       username: username,
-      message: parts.join(':').trim()
+      message: playerMessage,
     })
   }
 
@@ -50,15 +55,11 @@ class StateHandler extends EventHandler {
   }
 
   isLobbyJoinMessage(message) {
-    return (
-        message.endsWith(' the lobby!')
-     || message.endsWith(' the lobby! <<<')
-    ) && message.includes('[MVP+')
+    return (message.endsWith(' the lobby!') || message.endsWith(' the lobby! <<<')) && message.includes('[MVP+')
   }
 
   isGuildMessage(message) {
-    return message.startsWith('Guild >')
-        && message.includes(':')
+    return message.startsWith('Guild >') && message.includes(':')
   }
 }
 
