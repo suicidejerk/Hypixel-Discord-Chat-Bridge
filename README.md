@@ -39,6 +39,10 @@ While the dependencies are being installed you can copy the configuration file.
 Next edit and setup the config file with a proper Minecraft and Discord settings, once you're done you can start the app.
 
     node index.js
+    
+*(Aditionally)* Install [Chat Triggers](https://www.chattriggers.com/) mod v1.3.0 or higher for Minecraft 1.8.9 and import [my module](https://www.chattriggers.com/modules/v/SuiChat) to make the chat look cleaner by typing this in the ingame chat:
+
+    /ct import suichat
 
 ### Configuration
 
