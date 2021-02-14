@@ -21,7 +21,7 @@ class MessageHandler {
     }
 
     this.discord.broadcastMessage({
-      username: message.member.displayName,
+      username: message.member.displayName.replace(/:/g, "¦"),
       message: this.stripDiscordContent(message.content),
     })
   }
