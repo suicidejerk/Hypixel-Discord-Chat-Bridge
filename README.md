@@ -26,7 +26,7 @@ A two-way chat bridge between [Hypixel](https://hypixel.net/) guild chat and a [
 
 To get started, clone down the repository using:
 
-    git clone https://github.com/Senither/hypixel-discord-chat-bridge.git
+    git clone https://github.com/suicidejerk/hypixel-discord-chat-bridge.git
 
 Next go into the `hypixel-discord-chat-bridge` folder and install all the dependencies using Yarn.
 
