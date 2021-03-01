@@ -13,7 +13,7 @@ class LogEvent {
     minecraft(message) {
         return console.log(chalk.white.bgMagenta(`[${this.getDate()}] Discord Chat   >`) + ' ' + chalk.magenta(message))
     }
-    error() {
+    error(message) {
         return console.log(chalk.white.bgRed(`[${this.getDate()}] Error          >`) + ' ' + chalk.red(message))
     }
 

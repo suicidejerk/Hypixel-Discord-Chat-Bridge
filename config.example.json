@@ -7,7 +7,9 @@
     "username": "yourUsername",
     "password": "yourPassword",
     "lobbyHolder": "ignUsername",
-    "accountType": "mojang"
+    "accountType": "mojang",
+    "hypixelToken": "yourHypixelAPIToken",
+    "fragRuns": "everyone"
   },
   "discord": {
     "token": "discordBotToken",
