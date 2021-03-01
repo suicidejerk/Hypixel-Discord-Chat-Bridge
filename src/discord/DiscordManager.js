@@ -4,6 +4,7 @@ const StateHandler = require('./handlers/StateHandler')
 const MessageHandler = require('./handlers/MessageHandler')
 const CommandHandler = require('./commands/CommandHandler')
 const Discord = require('discord.js-light')
+const LogEvent = require('../LogEvent')
 
 class DiscordManager extends CommunicationBridge {
   constructor(app) {
@@ -13,6 +14,7 @@ class DiscordManager extends CommunicationBridge {
 
     this.stateHandler = new StateHandler(this)
     this.messageHandler = new MessageHandler(this, new CommandHandler(this))
+    this.logEvent = new LogEvent()
   }
 
   connect() {
@@ -46,7 +48,7 @@ class DiscordManager extends CommunicationBridge {
     this.client.on('message', message => this.messageHandler.onMessage(message))
 
     this.client.login(config.discord.token).catch(error => {
-      console.error('Discord Bot Error: ', error)
+      this.logEvent.error('Discord Bot Error: ', error)
     })
 
     // Notify chat bridge is off
@@ -70,7 +72,7 @@ class DiscordManager extends CommunicationBridge {
 
   onBroadcast({ username, message }) {
     this.client.channels.fetch(config.discord.channel).then(channel => {
-      console.log(`Discord Broadcast > ${username}: ${message}`)
+      this.logEvent.discord(`${username}: ${message}`)
 
       channel.send({
         embed: {

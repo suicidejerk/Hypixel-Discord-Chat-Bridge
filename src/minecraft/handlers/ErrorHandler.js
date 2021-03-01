@@ -1,8 +1,10 @@
 const EventHandler = require('../../contracts/EventHandler')
+const LogEvent = require('../../LogEvent')
 
 class StateHandler extends EventHandler {
   registerEvents(bot) {
     this.bot = bot
+    this.logEvent = new LogEvent()
 
     this.bot.on('error', (...args) => this.onError(...args))
   }
@@ -13,10 +15,10 @@ class StateHandler extends EventHandler {
     }
 
     if (this.isConnectionRefusedError(error)) {
-      return console.error('Connection refused while attempting to login via the Minecraft client')
+      return this.logEvent.error('Connection refused while attempting to login via the Minecraft client')
     }
 
-    console.error('Minecraft Bot Error: ', error)
+    this.logEvent.error('Minecraft Bot Error: ' + error)
   }
 
   isConnectionResetError(error) {

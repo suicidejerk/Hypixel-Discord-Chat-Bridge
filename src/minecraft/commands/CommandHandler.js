@@ -1,4 +1,5 @@
 const PingCommand = require('./PingCommand')
+const LogEvent = require('../../LogEvent')
 const GuildLobbyCommand = require('./GuildLobbyCommand')
 
 class CommandHandler {
@@ -13,6 +14,7 @@ class CommandHandler {
         handler: new GuildLobbyCommand(minecraft),
       },
     ]
+    this.logEvent = new LogEvent()
   }
 
   handle(player, message) {
@@ -32,7 +34,7 @@ class CommandHandler {
   }
 
   runCommand(command, player, message) {
-    console.log(`Minecraft Command Handler > ${player} - [${command.handler.constructor.name}] ${message}`)
+    this.logEvent.misc(`Minecraft Command Handler > ${player} - [${command.handler.constructor.name}] ${message}`)
 
     command.handler.onCommand(player, message)
   }

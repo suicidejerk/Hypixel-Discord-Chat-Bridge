@@ -1,4 +1,5 @@
 const EventHandler = require('../../contracts/EventHandler')
+const LogEvent = require('../../LogEvent')
 
 class StateHandler extends EventHandler {
   constructor(minecraft) {
@@ -7,6 +8,7 @@ class StateHandler extends EventHandler {
     this.minecraft = minecraft
     this.loginAttempts = 0
     this.exactDelay = 0
+    this.logEvent = new LogEvent()
   }
 
   registerEvents(bot) {
@@ -18,7 +20,7 @@ class StateHandler extends EventHandler {
   }
 
   onLogin() {
-    console.log('Minecraft client ready, logged in as ' + this.bot.username)
+    this.logEvent.misc('Minecraft client ready, logged in as ' + this.bot.username)
 
     this.loginAttempts = 0
     this.exactDelay = 0
@@ -34,14 +36,13 @@ class StateHandler extends EventHandler {
       }
     }
 
-    console.log(`Minecraft bot disconnected from server, attempting reconnect in ${loginDelay / 1000} seconds`)
+    this.logEvent.error(`Minecraft bot disconnected from server, attempting reconnect in ${loginDelay / 1000} seconds`)
 
     setTimeout(() => this.minecraft.connect(), loginDelay)
   }
 
   onKicked(reason) {
-    console.log(reason)
-    console.log(`Minecraft bot was kicked from server for "${reason}"`)
+    this.logEvent.error(`Minecraft bot was kicked from server for "${reason}"`)
 
     this.loginAttempts++
   }

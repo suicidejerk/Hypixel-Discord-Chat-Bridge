@@ -1,5 +1,6 @@
 const EventHandler = require('../../contracts/EventHandler')
 const CommandHandler = require('../commands/CommandHandler')
+const LogEvent = require('../../LogEvent')
 
 class StateHandler extends EventHandler {
   constructor(minecraft, command) {
@@ -7,6 +8,7 @@ class StateHandler extends EventHandler {
 
     this.minecraft = minecraft
     this.command = command
+    this.logEvent = new LogEvent()
   }
 
   registerEvents(bot) {
@@ -19,7 +21,7 @@ class StateHandler extends EventHandler {
     const message = event.toString().trim()
 
     if (this.isLobbyJoinMessage(message)) {
-      console.log('Sending Minecraft client to limbo')
+      this.logEvent.misc('Sending Minecraft client to limbo')
 
       return this.bot.chat('§')
     }

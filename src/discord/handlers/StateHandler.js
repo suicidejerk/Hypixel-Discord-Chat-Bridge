@@ -1,10 +1,13 @@
+const LogEvent = require('../../LogEvent')
+
 class StateHandler {
   constructor(discord) {
     this.discord = discord
+    this.logEvent = new LogEvent()
   }
 
   onReady() {
-    console.log('Discord client ready, logged in as ' + this.discord.client.user.tag)
+    this.logEvent.misc('Discord client ready, logged in as ' + this.discord.client.user.tag)
   }
 }
 

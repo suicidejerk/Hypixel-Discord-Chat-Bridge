@@ -1,6 +1,7 @@
 const config = require('../../../config.json')
 const RelogCommand = require('./RelogCommand')
 const HelpCommand = require('./HelpCommand')
+const LogEvent = require('../../LogEvent')
 
 class CommandHandler {
   constructor(discord) {
@@ -14,6 +15,7 @@ class CommandHandler {
         handler: new HelpCommand(discord),
       },
     ]
+    this.logEvent = new LogEvent()
   }
 
   handle(message) {
@@ -37,7 +39,7 @@ class CommandHandler {
       return message.reply("You're not allowed to run this command!")
     }
 
-    console.log(`Discord Command Handler > [${command.handler.constructor.name}] ${message.content}`)
+    this.logEvent.misc(`[${command.handler.constructor.name}] ${message.content}`)
 
     command.handler.onCommand(message)
   }
