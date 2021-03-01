@@ -15,6 +15,6 @@
     "token": "discordBotToken",
     "channel": "channelId",
     "commandRole": "roleId",
-    "profanity-filter": true
+    "profanityFilter": true
   }
 }
