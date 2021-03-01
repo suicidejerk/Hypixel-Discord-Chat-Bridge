@@ -68,8 +68,6 @@ The command role is the ID of any role on the server the bot is hosted for, any 
 
 ### Roadmap
 
-- [ ] Chat message filter
-  - The filter should block any messages sent from Discord to Hypixel that contains banable words, and words that could potentially cause a mute.
 - [ ] Log guild joins & leaves
   - Send a message in Discord when people join or leave the guild, and when people login or logout of Hypixel.
 
