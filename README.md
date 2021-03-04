@@ -56,7 +56,7 @@ The server is the server the Minecraft client should connect to, by default it w
 
 The minecraft section includes a `username` and `password` option, if using a Mojang account these should be filled out with your Mojang username and password for the Minecraft account you plan on using, your Minecraft username is most likely the email it was created with. If using with a microsoft account change `accountType` to `microsoft`, `username` and `password` are not required and will be left blank as you will be directed to the [Microsoft Link page]( https://www.microsoft.com/link). There is also a `lobbyHolder` option which is used in the `!guildlobby` command, this command will whisper the user specified in the config with a message using the `?tw <username>` format, for this command to do anything another bot needs to listen, and then act when receiving the message. 
 
-The `fragRuns` option can be either `everyone` to allow everyone to do frag tuns with the bot, `none` to not allow anyone or `<guildname>` to only allow members from that specific guild.
+The `fragRuns` option can be either `everyone` to allow everyone to do frag tuns with the bot, `none` to not allow anyone or `<guildname>` to only allow members from that specific guild. If used in guild mode you'll have to provide a valid Hypixel API key in `hypixelToken` to fecth the guild members, you can obtain one freely by doing /api in game when logged in the Hypixel server.
 
 #### Discord
 
