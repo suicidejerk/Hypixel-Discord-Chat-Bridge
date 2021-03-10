@@ -226,7 +226,7 @@ class StateHandler extends EventHandler {
         let pastInviter = this.inviter
         this.inviter = 0
 
-        let sorryMsg = "Sorry, I'm already in a party with " + this.partyLeader ? this.partyLeader : "someone" + ", try in a bit! uwu"
+        let sorryMsg = "Sorry, I'm already in a party with " + (this.partyLeader ? this.partyLeader : "someone") + ", try in a bit! uwu"
 
         sorryMsg = this.addCharToString(sorryMsg, "⭍", 15);
         this.bot.chat("/msg " + pastInviter + " " + sorryMsg)
