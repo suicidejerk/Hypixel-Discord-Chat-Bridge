@@ -2,6 +2,12 @@ const EventHandler = require('../../contracts/EventHandler')
 const LogEvent = require('../../LogEvent')
 
 class StateHandler extends EventHandler {
+  constructor(minecraft) {
+    super()
+
+    this.minecraft = minecraft
+  }
+
   registerEvents(bot) {
     this.bot = bot
     this.logEvent = new LogEvent()

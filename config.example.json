@@ -15,6 +15,14 @@
     "token": "discordBotToken",
     "channel": "channelId",
     "commandRole": "roleId",
-    "profanityFilter": true
+    "profanityFilter": true,
+    "ownerId": "ownerId",
+    "prefix": "!",
+    "messageMode": "bot"
+  },
+  "express": {
+    "enabled": false,
+    "port": 8880,
+    "authorization": "authorizationHeaderString"
   }
 }
