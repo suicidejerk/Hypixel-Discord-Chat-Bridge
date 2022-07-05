@@ -68,26 +68,45 @@ class DiscordManager extends CommunicationBridge {
         )
       })
     })
+
+    process.on('uncaughtException', () => {
+      this.client.channels.fetch(config.discord.channel).then(channel => {
+        channel.send({
+          embed: {
+            description: 'Chat Bridge is OFF',
+            color: 11796480,
+            timestamp: new Date(),
+            author: {
+              name: this.client.user.username,
+              icon_url: this.client.user.avatarURL()
+            }
+          }
+        }).then(() => { process.exit() }
+        )
+      })
+    })
   }
 
   onBroadcast({ username, message }) {
     this.client.channels.fetch(config.discord.channel).then(channel => {
       this.logEvent.discord(`${username}: ${message}`)
 
-      channel.send({
-        embed: {
-          description: message,
-          color: 8311585,
-          timestamp: new Date(),
-          footer: {
-            text: 'Message was sent',
+      try {
+        channel.send({
+          embed: {
+            description: message,
+            color: 8311585,
+            timestamp: new Date(),
+            footer: {
+              text: 'Message was sent',
+            },
+            author: {
+              name: username,
+              icon_url: 'https://www.mc-heads.net/avatar/' + username,
+            },
           },
-          author: {
-            name: username,
-            icon_url: 'https://www.mc-heads.net/avatar/' + username,
-          },
-        },
-      })
+        })
+      } catch (err) { }
     })
   }
 }

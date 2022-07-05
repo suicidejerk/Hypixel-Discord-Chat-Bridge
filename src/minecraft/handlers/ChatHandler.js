@@ -154,9 +154,9 @@ class StateHandler extends EventHandler {
     if (CONFIG.minecraft.fragRuns !== "everyone" && CONFIG.minecraft.fragRuns !== "none") {
       this.guildMembers = await this.getGuildMembers(CONFIG.minecraft.fragRuns);
 
-      setInterval(async () => {  // Refresh it every 15 minutes
+      setInterval(async () => {  // Refresh it every 24h
         this.guildMembers = await this.getGuildMembers(CONFIG.minecraft.fragRuns);
-      }, 900000)
+      }, 86400000)
     }
 
     this.bot.on('message', (...args) => this.onMessage(...args))
@@ -165,46 +165,10 @@ class StateHandler extends EventHandler {
   onMessage(event) {
     const message = event.toString().trim()
 
-    if (this.isLobbyJoinMessage(message)) {
-      this.logEvent.misc('Sending Minecraft client to limbo')
-
-      return this.bot.chat('§')
-    }
-
-    if (this.isPartyInviteMessage(message)) {
-      this.inviter = message.split(" ")[1]
-      if (this.inviter === "has") this.inviter = message.split(" ")[0].replace("-----------------------------\n", "") // Nons
-
-      if (CONFIG.minecraft.fragRuns !== "none") {
-        if ((CONFIG.minecraft.fragRun !== "everyone" && this.guildMembers && !this.guildMembers.has(this.inviter))) {
-          setTimeout(() => {
-            this.logEvent.party("Won't accept party invite from: " + this.inviter + ", since they aren't in " + CONFIG.minecraft.fragRuns)
-            let sorryMsg = "Sorry, this bot is set to only accept party invites from guild members, sucks to suck! Join " + CONFIG.minecraft.fragRuns + "!"
-
-            sorryMsg = this.addCharToString(sorryMsg, "⭍", 15);
-            this.bot.chat("/msg " + this.inviter + " " + sorryMsg)
-          }, 100)
-        } else {
-          this.logEvent.party("Accepting party invite from: " + this.inviter)
-
-          setTimeout(() => {
-            this.bot.chat("/p join " + this.inviter)
-          }, 100)
-        }
-      } else {
-        setTimeout(() => {
-          this.logEvent.party("Won't accept party invite from: " + this.inviter + ", since frag runs are turned off")
-          let sorryMsg = "Sorry, frag runs are turned off at the moment."
-
-          sorryMsg = this.addCharToString(sorryMsg, "⭍", 15);
-          this.bot.chat("/msg " + this.inviter + " " + sorryMsg)
-        }, 100)
-      }
-      return
-    }
-
     if (this.inviter) {
-      if (this.isMessageYouJoinedParty(message)) {
+      if (this.isMessageJoinedParty(message)) {
+        this.bot.chat("/party transfer " + this.inviter)
+
         this.logEvent.party("Joined party from: " + this.inviter)
         this.partyLeader = this.inviter
         this.inviter = 0
@@ -234,9 +198,51 @@ class StateHandler extends EventHandler {
           if (this.inviter === pastInviter || this.partyLeader == 0) this.bot.chat("/p leave") // In case it gets stuck
         }, 5000)
       }
+    } else {
+      if (this.isPrivateMessage(message)) {
+        // Get inviter
+        message.indexOf(']') ? this.inviter = message.split(" ")[2].replace(':', '') : this.inviter = message.split(" ")[1].replace(':', '') // Nons
+        // this.inviter = message.split(" ")[1]
+        // if (this.inviter === "has") this.inviter = message.split(" ")[0].replace("-----------------------------\n", "") // Nons
+  
+        if (CONFIG.minecraft.fragRuns !== "none") {
+          if ((CONFIG.minecraft.fragRun !== "everyone" && this.guildMembers && !this.guildMembers.has(this.inviter))) {
+            setTimeout(() => {
+              this.logEvent.party("Won't accept party invite from: " + this.inviter + ", since they aren't in " + CONFIG.minecraft.fragRuns)
+              let sorryMsg = "Sorry, this bot is set to only accept party invites from guild members, sucks to suck! Join " + CONFIG.minecraft.fragRuns + "!"
+  
+              sorryMsg = this.addCharToString(sorryMsg, "⭍", 15);
+              this.bot.chat("/msg " + this.inviter + " " + sorryMsg)
+            }, 200)
+          } else {
+            this.logEvent.party("Accepting party invite from: " + this.inviter)
+  
+            setTimeout(() => {
+              this.bot.chat("/p " + this.inviter)
+            }, 200)
+          }
+        } else {
+          setTimeout(() => {
+            this.logEvent.party("Won't accept party invite from: " + this.inviter + ", since frag runs are turned off")
+            let sorryMsg = "Sorry, frag runs are turned off at the moment."
+  
+            sorryMsg = this.addCharToString(sorryMsg, "⭍", 15);
+            this.bot.chat("/msg " + this.inviter + " " + sorryMsg)
+          }, 200)
+        }
+        return
+      }
     }
 
     if (!this.isGuildMessage(message)) {
+      if (message.includes("Guild Log")) {
+        this.minecraft.broadcastMessage({
+          username: this.bot.username,
+          message: message,
+        })
+      } else {
+        this.logEvent.misc(message)
+      }
       return
     }
 
@@ -266,6 +272,10 @@ class StateHandler extends EventHandler {
     return this.bot.username === username
   }
 
+  isPrivateMessage(message) {
+    return message.startsWith('From ')
+  }
+
   isLobbyJoinMessage(message) {
     return (message.endsWith(' the lobby!') || message.endsWith(' the lobby! <<<')) && message.includes('[MVP+')
   }
@@ -278,8 +288,8 @@ class StateHandler extends EventHandler {
     return message.endsWith(" here to join!\n-----------------------------") && !message.includes(':')
   }
 
-  isMessageYouJoinedParty(message) {
-    return message.endsWith(" party!") && !message.includes(':')
+  isMessageJoinedParty(message) {
+    return message.endsWith(" joined the party.") && !message.includes(':')
   }
 
   isMessageYoureInParty(message) {

@@ -8,6 +8,7 @@ class HelpCommand extends DiscordCommand {
         '**Command List**',
         '`!help` - Displays this command list',
         '`!relog [delay]` - Relogs the MC client, a delay can be given in seconds, if no delay is given it will default to 5 seconds.',
+        '`!type <string>` - Types that in chat without /gc (please dont be bad).',
       ].join('\n')
     )
   }

@@ -22,8 +22,8 @@ class MessageHandler {
     }
 
     this.discord.broadcastMessage({
-      username: config.discord.profanityFilter ? profanityFilter.clean(message.member.displayName.replace(/:/g, "¦")) : message.member.displayName.replace(/:/g, "¦"),
-      message: config.discord.profanityFilter ? profanityFilter.clean(this.stripDiscordContent(message.content)) : this.stripDiscordContent(message.content),
+      username: config.discord.profanityFilter ? (profanityFilter.clean(message.member.displayName.replace(/:/g, "¦"))).substring(0, 30) : (message.member.displayName.replace(/:/g, "¦")).substring(0, 30),
+      message: config.discord.profanityFilter ? (profanityFilter.clean(this.stripDiscordContent(message.content))).substring(0, 200) : (this.stripDiscordContent(message.content)).substring(0, 200),
     })
   }
 
