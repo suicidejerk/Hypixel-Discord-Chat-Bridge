@@ -7,7 +7,7 @@ class MessageHandler {
     this.command = command
   }
 
-  onMessage(message) {
+  async onMessage(message) {
     if (!this.shouldBroadcastMessage(message)) {
       return
     }
@@ -24,7 +24,20 @@ class MessageHandler {
     this.discord.broadcastMessage({
       username: config.discord.profanityFilter ? (profanityFilter.clean(message.member.displayName.replace(/:/g, "¦"))).substring(0, 30) : (message.member.displayName.replace(/:/g, "¦")).substring(0, 30),
       message: config.discord.profanityFilter ? (profanityFilter.clean(this.stripDiscordContent(message.content))).substring(0, 200) : (this.stripDiscordContent(message.content)).substring(0, 200),
+      replyingTo: await this.fetchReply(message),
     })
+  }
+
+  async fetchReply(message) {
+    try {
+      if (!message.reference) return null
+
+      const reference = await message.channel.messages.fetch(message.reference.messageID)
+
+      return reference.member ? reference.member.displayName : reference.author.username
+    } catch (e) {
+      return null
+    }
   }
 
   stripDiscordContent(message) {
@@ -42,7 +55,7 @@ class MessageHandler {
   }
 
   shouldBroadcastMessage(message) {
-    return !message.author.bot && message.channel.id == config.discord.channel && message.content && message.content.length > 0
+    return !message.author.bot && message.channel.id == this.discord.app.config.discord.channel && message.content && message.content.length > 0
   }
 }
 

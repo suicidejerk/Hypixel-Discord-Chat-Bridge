@@ -15,6 +15,18 @@ class CommunicationBridge {
     return this.bridge.onBroadcast(event)
   }
 
+  broadcastPlayerToggle(event) {
+    return this.bridge.onPlayerToggle(event)
+  }
+
+  broadcastCleanEmbed(event) {
+    return this.bridge.onBroadcastCleanEmbed(event)
+  }
+
+  broadcastHeadedEmbed(event) {
+    return this.bridge.onBroadcastHeadedEmbed(event)
+  }
+
   connect() {
     throw new Error('Communication bridge connection is not implemented yet!')
   }
